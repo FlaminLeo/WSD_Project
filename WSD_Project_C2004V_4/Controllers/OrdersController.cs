@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -11,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WSD_Project_C2004V_4.Models
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Member")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Member,Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class OrdersController : ControllerBase
@@ -28,7 +29,15 @@ namespace WSD_Project_C2004V_4.Models
         [HttpGet]
         public IEnumerable<Order> GetOrder()
         {
-            return _context.Order;
+            if (User.FindFirstValue(ClaimTypes.Role) == "Admin")
+            {
+                return _context.Order;
+            }else
+            {
+                var userOrders = _context.Order.Where(Orders => Orders.CustomerID.Contains(User.FindFirstValue(ClaimTypes.NameIdentifier)));
+                return userOrders;
+            }
+
         }
 
         // GET: api/Orders/5
@@ -96,10 +105,13 @@ namespace WSD_Project_C2004V_4.Models
                 return BadRequest(ModelState);
             }
 
+            order.CustomerID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             _context.Order.Add(order);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetOrder", new { id = order.OrderID }, order);
+
         }
 
         // DELETE: api/Orders/5

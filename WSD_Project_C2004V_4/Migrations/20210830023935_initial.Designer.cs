@@ -10,8 +10,8 @@ using WSD_Project_C2004V_4.Models;
 namespace WSD_Project_C2004V_4.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210829155048_CreateIdentitySchema")]
-    partial class CreateIdentitySchema
+    [Migration("20210830023935_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -138,9 +138,11 @@ namespace WSD_Project_C2004V_4.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.Property<string>("LoginProvider");
+                    b.Property<string>("LoginProvider")
+                        .HasMaxLength(128);
 
-                    b.Property<string>("ProviderKey");
+                    b.Property<string>("ProviderKey")
+                        .HasMaxLength(128);
 
                     b.Property<string>("ProviderDisplayName");
 
@@ -171,9 +173,11 @@ namespace WSD_Project_C2004V_4.Migrations
                 {
                     b.Property<string>("UserId");
 
-                    b.Property<string>("LoginProvider");
+                    b.Property<string>("LoginProvider")
+                        .HasMaxLength(128);
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasMaxLength(128);
 
                     b.Property<string>("Value");
 
@@ -203,6 +207,8 @@ namespace WSD_Project_C2004V_4.Migrations
                     b.Property<int>("OrderID")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CustomerID");
 
                     b.Property<string>("CustomerName")
                         .IsRequired();

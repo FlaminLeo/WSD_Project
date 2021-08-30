@@ -8,6 +8,8 @@ namespace WSD_Project_C2004V_4.Models
 {
     public class Order
     {
+        public string CustomerID { get; set; }
+
         public int OrderID { get; set; }
         [Required]
         public string CustomerName { get; set; }
