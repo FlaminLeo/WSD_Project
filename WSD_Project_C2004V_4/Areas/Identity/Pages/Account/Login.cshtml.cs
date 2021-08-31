@@ -77,7 +77,8 @@ namespace WSD_Project_C2004V_4.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+                    ModelState.AddModelError(string.Empty, "Successful Login.");
+                    return Page();
                 }
                 if (result.RequiresTwoFactor)
                 {
